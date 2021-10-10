@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf">
+<head th:fragment="head">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" th:href="@{/css/myStyle.css}" />
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	crossorigin="anonymous">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+	integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+	integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+	crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"
+	integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+	crossorigin="anonymous"></script>
+<style>
+/* Navbar */
+.navbar {
+	position: absolute;
+	top: 10px;
+	z-index: 10;
+	width: 100%;
+	font-size: 16px;
+	font-weight: bold;
+	padding-left: 100px;
+}
+
+.nav-link {
+	color: black;
+}
+
+/* change the brand and text color */
+.navbar-custom .navbar-brand, .navbar-custom .navbar-text {
+	text-decoration: none;
+	color: #fff;
+}
+
+/* change the link color */
+.navbar-custom .navbar-nav .nav-link {
+	text-decoration: none;
+	color: #fff;
+}
+
+/* change the color of active or hovered links */
+.navbar-custom .nav-item.active .nav-link, .navbar-custom {
+	text-decoration: none;
+	color: #fff;
+}
+
+.nav-item .nav-link:hover {
+	text-decoration: none;
+}
+
+/* for dropdown only - change the color of dropdown */
+.navbar-custom .dropdown-menu {
+	background-color: #3193de;
+}
+
+.navbar-custom .dropdown-item {
+	text-decoration: none;
+	color: #fff;
+}
+
+.navbar-custom .dropdown-item:hover, .navbar-custom .dropdown-item:focus
+	{
+	text-decoration: none;
+	background-color: #3193de;
+}
+
+.navbar-header .navbar-toggler {
+	border: 0;
+}
+
+.navbar-toggler-icon {
+	color: #fff;
+}
+
+.navbar-toggler-icon:hover {
+}
+</style>
+</head>
+
+<body id="myPage" data-spy="scroll" data-target=".navbar"
+	data-offset="50">
+	<div th:fragment="header">
+		<nav class="navbar navbar-custom navbar-expand-md navbar-dark">
+
+			<a class="navbar-brand" href="/#">عمارت</a>
+
+
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarCollapse" aria-controls="navbar-custom"
+				aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon" style="color: white;"></span>
+			</button>
+
+
+			<div class="collapse navbar-collapse" style="margin-right: 10px;"
+				id="navbarCollapse" dir="rtl">
+
+				<ul class="navbar-nav " dir="rtl">
+					<li class="nav-item"><a class="nav-link" href="/#">خانه</a></li>
+					<li class="nav-item"><a class="nav-link" href="/#Search">جستجوی
+							پیشرفته</a></li>
+					<li class="nav-item"><a class="nav-link" href="/#lastHomes">آخرین
+							خانه ها </a></li>
+					<li class="nav-item"><a class="nav-link" href="/#ContactUs">ارتباط
+							با ما</a></li>
+
+
+				</ul>
+			</div>
+		</nav>
+	</div>
+
+	<div th:fragment="search">
+
+		<div dir="rtl" class="page-wrapper bg-img-1  p-t-200 p-b-100"
+			id="Search">
+			<div class="wrapper wrapper--w1226">
+				<div class="card card-6">
+					<div class="card-body">
+						<form method="get" th:action="@{/home/getBySearch}">
+							<div class="row row-space">
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="label mt-4">عنوان: </label> <input
+											class="input--style-1" type="text" name="title"
+											placeholder="عنوان خانه ی موردنظر" required="required">
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="form-group">
+										<label class="label mt-4 ml-1">نوع ملک: </label> <select
+											class="form-control " id="catSelect" name="category">
+											<option value="-1" hidden>انتخاب کنید ...</option>
+											<option th:each="cat : ${categories}"
+												th:value="${cat.getId()}" th:text="${cat.getTitle()}">
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="form-group">
+										<label class="label mt-4 ml-1">استان: </label> <select
+											class="form-control " id="provinceSelect" name="province"
+											onchange="getCitiesByProvinceId()">
+											<option value="-1" hidden>انتخاب کنید ...</option>
+											<option th:each="province : ${provinces}"
+												th:value="${province.getId()}"
+												th:text="${province.getTitle()}">
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="form-group">
+										<label class="label mt-4 ml-1">انتخاب کنید: </label> <select
+											class="form-control " id="citySelect" name="city">
+											<option value="0" hidden>انتخاب کنید ...</option>
+
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="label mt-4">منطقه</label> <input
+											class="input--style-1" type="text" name="return"
+											id="input-end">
+									</div>
+								</div>
+							</div>
+							<div class="row row-space">
+
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="label mt-4">متراژ خانه از : </label> <input
+											class="input--style-1" type="number" value="0"
+											name="totalAreaFrom" id="input-start">
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="label mt-4">متراژ خانه تا :</label> <input
+											class="input--style-1 " type="number" value="0"
+											name="totalAreaTo" id="input-start">
+									</div>
+								</div>
+								<div class="col-sm-3 ">
+									<div class="form-group">
+										<label class="label mt-4">قیمت از: </label> <input
+											class="input--style-1" type="number" value="0"
+											name="totalPriceFrom" id="input-start">
+									</div>
+								</div>
+								<div class="col-sm-3 ">
+									<div class="form-group">
+										<label class="label mt-4">قیمت تا:</label> <input
+											class="input--style-1 " type="number" value="0"
+											name="totalPriceTo" id="input-start">
+									</div>
+								</div>
+							</div>
+
+
+							<div class="row row-space">
+
+
+								<div class="col-sm-3 ">
+									<div class="form-group">
+										<label class="label mt-4">سال ساخت از: </label> <input
+											class="input--style-1" type="number" value="0"
+											name="yearOfConstructionFrom" id="input-start">
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="label mt-4">سال ساخت تا:</label> <input
+											class="input--style-1 " type="number" value="0"
+											name="yearOfConstructionTo" id="input-start">
+									</div>
+								</div>
+
+								<div class="col-sm-4"></div>
+
+								<div class="col-sm-2 ">
+									<button dir="ltr" class=" form-group btn-submit m-b-0 "
+										type="submit">جستجو</button>
+								</div>
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
