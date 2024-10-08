@@ -1,97 +1,120 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-<div th:replace="pages/fragments/layout::head"></div>
-<link rel="stylesheet" th:href="@{/css/style_searchForm.css}" />
-<style>
-img {
-	width: 100%;
-}
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <link rel="stylesheet" th:href="@{/css/footerStyle.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/style_searchForm.css}"/>
+    <link rel="stylesheet" th:href="@{/css/navbarPages.css}" type="text/css"/>
 
-p {
-	font-size: 16px;
-}
+    <style>
+        img {
+            width: 100%;
+        }
 
-a {
-	font-size: 18px;
-	font-weight: bold;
-}
-</style>
+        p {
+            font-size: 16px;
+        }
+
+        a {
+            font-size: 18px;
+            font-weight: bold;
+        }
+		.model-4 a{
+
+				margin:0 5px;
+				padding: 0;
+				width: 30px;
+				height: 30px;
+				line-height: 30px;
+			 border-radius: 50px;
+			background-color:#edf4ff ;
+			color: black;
+            font-family:Poppins-Regular ;font-size: 17px
+        }
+
+
+
+
+	</style>
 </head>
 <body>
 
-	<div th:replace="pages/fragments/layout::header"></div>
-	<div th:replace="pages/fragments/layout::search"></div>
+<div style="background-color: #868e96" th:replace="pages/fragments/navbarLayout::navbar"></div>
+<div th:replace="pages/fragments/layout::search"></div>
 
-	<div class="container-fluid">
-		<div class="col-sm-12">
-			<nav aria-label="Page navigation example"
-				style="float: center; margin-left: auto;">
-				<ul class="pagination">
-					<li class="page-item" th:classappend="${homes.first}?disabled">
-						<a class="page-link"
-						th:href="@{/home/getBySearch(page=${homes.number -1})}">صفحه ی
-							قبل</a>
-					</li>
-					<li class="page-item" th:classappend="${homes.number ==i}?active"
-						th:each="i : ${#numbers.sequence(0,homes.totalPages -1)}"><a
-						class="page-link" th:href="@{/home/getBySearch(page=${i})}">[[${i+1}]]</a>
-					</li>
-					<li class="page-item" th:classappend="${homes.last}?disabled">
-						<a class="page-link"
-						th:href="@{/home/getBySearch(page=${homes.number + 1})}"> صفحه
-							ی بعد</a>
-					</li>
-				</ul>
-			</nav>
-		</div>
+<div class="container-fluid" id="homes">
+    <div class="row border " style="margin: 20px"
+         th:each="home : ${homes}">
+        <div class="col-xs-12 col-md-3" style="float: left;clear: left; margin: 10px">
+            <img class=" img-fluid" th:if="${home.getHomePictures().size() !=0}"
+                 th:each="homePic, iter :${home.getHomePictures()}"
+                 th:src="'/img/'+${homePic.getImage()}"
+                 th:id="'img'+${iter.index}+'home'+${homePic.getId()}"
+                 style="display: none">
+            <img class=" img-fluid"
+                 th:unless="${home.getHomePictures().size() !=0}" src="/img/22.jpg">
+            <p class="text-center small text-muted m-0 p-0"
+               th:text="'Last Updated : '+  ${#temporals.format(home.getUpdatedAt(),'yyyy-MM-dd HH:mm')}"></p>
+        </div>
+        <div class="col-xs-6 col-md-8" style="margin-top:40px">
+
+            <h3 class="" style="float: right;clear:right;" th:text="${home.getTitle()}"></h3>
+            <br> <br>
+            <p class=""
+               style="text-align: right; font-size: 18px; color: #014A39; font-family: sans-serif;"
+               th:text="'متراژ کل : '+ ${home.getTotalArea()}"></p>
+            <p class=""
+               style="text-align: right; font-size: 18px; color: #014A39; font-family: sans-serif;"
+               th:text="'متراژ خانه : '+ ${home.getHouseArea()}"></p>
+            <p class=""
+               style="text-align: right; font-size: 18px; color: #014A39; font-family: sans-serif;"
+               th:text="'قیمت کل : '+ ${home.getTotalPrice()}"></p>
+            <p class="card-text"
+               style="text-align: right; font-size: 18px; color: #014A39; font-family: sans-serif;"
+               th:text="' توضیحات : '+ ${home.getDescription()}"></p>
+            <br> <a th:href="@{/home/homeDetails/{id}(id=${home.getId()})}"
+                    style="float: right;" class="text-center">اطلاعات بیشتر</a>
+
+
+        </div>
+    </div>
+
+	<div class="col-sm-12 d-flex align-items-center justify-content-center" >
+		<nav aria-label="Page navigation example" style=" text-align: center;" class="pagination-container">
+			<ul class="pagination model-4">
+				<li class="page-item" th:classappend="${homes.first}?disabled">
+					<a class="page-link " style='width: 90px;border-radius: 50px 0 0 50px;'
+					   th:href="@{/home/getBySearch(page=${homes.number -1})}">صفحه ی
+						قبل</a>
+				</li>
+				<li class="page-item" th:classappend="${homes.number ==i}?active"
+					th:each="i : ${#numbers.sequence(0,homes.totalPages -1)}"><a
+						class="page-link" th:href="@{/home/getBySearch(page=${i})} ">[[${i+1}]]</a>
+				</li>
+				<li class="page-item" th:classappend="${homes.last}?disabled">
+					<a class="page-link" style="width: 90px;border-radius:0  50px 50px 0"
+					   th:href="@{/home/getBySearch(page=${homes.number + 1})}"> صفحه
+						ی بعد</a>
+				</li>
+			</ul>
+		</nav>
 	</div>
-	<div class="container-fluid">
-		<div class="row border "
-			style="margin: 30px; padding: 30px; background-color: #F8FFFE;"
-			th:each="home : ${homes}">
-			<div class="col-xs-12 col-md-3">
-				<img class=" img-fluid" th:if="${home.getHomePictures().size() !=0}"
-					th:each="homePic, iter :${home.getHomePictures()}"
-					th:src="'/img/'+${homePic.getImage()}"
-					th:id="'img'+${iter.index}+'home'+${homePic.getId()}"
-					style="display: none;"> 
-					<img class=" img-fluid"
-					th:unless="${home.getHomePictures().size() !=0}" src="/img/22.jpg">
-				<p class="text-center small text-muted m-0 p-0"
-					th:text="'Last Updated : '+  ${#temporals.format(home.getUpdatedAt(),'yyyy-MM-dd HH:mm')}"></p>
-			</div>
-			<div class="col-xs-6 col-md-8">
-
-				<h3 class="" style="float: right;" th:text="${home.getTitle()}"></h3>
-				<br> <br>
-				<p class=""
-					style="text-align: right; font-size: 18px; color: #014A39; font-family: sans-serif;"
-					th:text="'متراژ کل : '+ ${home.getTotalArea()}"></p>
-				<p class=""
-					style="text-align: right; font-size: 18px; color: #014A39; font-family: sans-serif;"
-					th:text="'متراژ خانه : '+ ${home.getHouseArea()}"></p>
-				<p class=""
-					style="text-align: right; font-size: 18px; color: #014A39; font-family: sans-serif;"
-					th:text="'قیمت کل : '+ ${home.getTotalPrice()}"></p>
-				<p class="card-text"
-					style="text-align: right; font-size: 18px; color: #014A39; font-family: sans-serif;"
-					th:text="' توضیحات : '+ ${home.getDescription()}"></p>
-				<br> <a th:href="@{/home/homeDetails/{id}(id=${home.getId()})}"
-					style="float: right;" class="text-center">اطلاعات بیشتر</a>
+</div>
+<div style="margin-top: 80px;" th:replace="pages/fragments/layout::footer"></div>
 
 
-			</div>
-		</div>
-	</div>
 <script>
-		$(document).ready(
-				function() {
-									
-					$( "*[id*='img0']" ).css("display","block")
-				});
+    $(document).ready(
+        function () {
+
+            $("*[id*='img0']").css("display", "block")
+        });
 </script>
 </body>
 </html>

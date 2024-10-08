@@ -7,6 +7,7 @@
 <link rel="stylesheet" th:href="@{/css/style_searchForm.css}" />
 <link rel="stylesheet" th:href="@{/css/searchBoxStyle.css}" />
 <link rel="stylesheet" th:href="@{/css/contact_style.css}" />
+	<link href="/css/fontawesome-free-5.15.4-web/css/all.min.css" rel="stylesheet" type="text/css"/>
 
 
 <style>
@@ -18,6 +19,14 @@
 
 .carousel-indicators li {
 	background-color: rgb(255, 255, 255);
+    width: 13px;
+    height: 13px;
+    border-radius: 100%;
+    margin: 20px;
+}
+
+.carousel-indicators {
+    bottom: -20px;
 }
 
 .carousel-caption {
@@ -140,13 +149,10 @@ section .section-title {
 	-webkit-transition: 1s;
 	-webkit-transform-style: preserve-3d;
 	-moz-transition: 1s;
-	-moz-transform-style: preserve-3d;
-	-o-transition: 1s;
-	-o-transform-style: preserve-3d;
-	-ms-transition: 1s;
 	-ms-transform-style: preserve-3d;
 	transition: 1s;
 	transform-style: preserve-3d;
+	min-width: 350px;
 }
 
 .frontside .card, .backside .card {
@@ -175,9 +181,22 @@ section .section-title {
 
 #searchBox {
 	position: absolute;
-	top: -10%;
-	left: 15%;
+	top:30%;
+	left: 50%;
+	transform: translateX(-50%);
 }
+
+@media(max-width:1050px)
+{
+#searchBox{
+position: relative;
+	top:0%;
+	background-color: #e2e3e5;
+	  min-height: 30vh;
+	
+}
+}
+
 </style>
 </head>
 <body>
@@ -185,8 +204,7 @@ section .section-title {
 
 
 
-	<div id="myCarousel" class="carousel slide" data-bs-ride="carousel"
->		<!-- Indicators -->
+	<div id="myCarousel" class="carousel slide" data-bs-ride="carousel">		<!-- Indicators -->
 		<ol class="carousel-indicators">
 			<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
 			<li data-target="#myCarousel" data-slide-to="1"></li>
@@ -196,42 +214,44 @@ section .section-title {
 		<!-- Wrapper for slides -->
 		<div class="carousel-inner" role="listbox">
 			<div class="carousel-item active">
-				<img src="/img/carousel3.jpg" alt="New York" width="1200"
-					height="700">
+				<img src="/img/carousel33.jpg"  width="1200"  style="max-height: 900px"
+					>
 				<div class="carousel-caption">
-					<h3>New York</h3>
-					<p>The atmosphere in New York is lorem ipsum.</p>
+					<h3 style="color: white;font-family: 'Poppins-Regular'">خانه ی رویایی</h3>
+					<p style="color: white; font-family: 'Poppins-Regular'">خانه ی رویایی خود را پیدا کنید.</p>
 				</div>
 			</div>
 
 			<div class="carousel-item">
-				<img src="/img/carousel55.jpg" alt="Chicago" width="1200"
-					height="700">
+				<img src="/img/carousel555.jpg"  style="max-height: 900px"
+					>
 				<div class="carousel-caption">
-					<h3>Chicago</h3>
-					<p>Thank you, Chicago - A night we won't forget.</p>
+					<h3 style="color: white;font-family:'Poppins-Regular'">جستجوی ملک</h3>
+					<p style="color: white; font-family:'Poppins-Regular'">متناسب با بودجه ی خود ، خانه ی معیارتان را پیدا کنید </p>
 				</div>
 			</div>
 
 			<div class="carousel-item">
-				<img src="/img/carousel66.jpg" alt="Los Angeles" width="1200"
-					height="700">
+				<img src="/img/carousel666.jpg" width="1200"  style="max-height: 900px"
+					>
 				<div class="carousel-caption">
-					<h3>LA</h3>
-					<p>Even though the traffic was a mess, we had the best time
-						playing at Venice Beach!</p>
+					<h3 style="color: #414242;font-family:'Poppins-Regular'">ثبت ملک</h3>
+					<p style="color: #414242; font-family:'Poppins-Regular'">می توانید با ثبت ملک خود ،بسیار راحت و سریع ملک خود را به فروش برسانید</p>
 				</div>
 			</div>
 		</div>
 
 		<!-- Left and right controls -->
-
-		<a class="carousel-control-prev" href="#myCarousel" role="button"
-			data-slide="prev"> <span class="carousel-control-prev-icon"
-			aria-hidden="true"></span> <span class="sr-only">Previous</span>
-		</a> <a class="carousel-control-next" href="#myCarousel" role="button"
-			data-slide="next"> <span class="carousel-control-next-icon"
-			aria-hidden="true"></span> <span class="sr-only">Next</span>
+		
+		<a class="carousel-control-prev" href="#myCarousel"
+							role="button" data-slide="prev"> <span
+							class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+							class="sr-only"></span>
+		</a>
+		 <a class="carousel-control-next"
+							href="#myCarousel" role="button" data-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="sr-only"></span>
 		</a>
 	</div>
 
@@ -239,9 +259,10 @@ section .section-title {
 		<form method="get" th:action="@{/home/getBySearch}">
 
 			<div class="inner-form">
-				<div class="input-field first-wrap" style="margin-right: 10px">
+				<div class="input-field first-wrap" style="margin-right: 0px">
 					<input id="search" name="title" type="text"
 						placeholder="خانه خود را جستجو کنید" />
+
 				</div>
 				<div class="input-field second-wraps" style="margin-right: 0px;">
 					<select
@@ -253,7 +274,7 @@ section .section-title {
 							th:text="${cat.getTitle()}">
 					</select>
 				</div>
-				<div class="input-field third-wrap" style="margin-right: 50px">
+				<div class="input-field third-wrap" style="margin-right: 0px">
 					<button class="btn-search" type="submit">جستجو</button>
 				</div>
 			</div>
@@ -298,16 +319,16 @@ section .section-title {
 									<div class="card-body text-center mt-4"
 										style="text-align: right;">
 										<p class="card-text"
-											style="text-align: right; font-size: 18px; color: #014A39; font-family: sans-serif;"
+											style="text-align: right; font-size: 18px; color: #014A39; font-family: 'Poppins-Regular';"
 											th:text="'متراژ کل : '+ ${home.getTotalArea()}"></p>
 										<p class="card-text"
-											style="text-align: right; font-size: 18px; color: #014A39; font-family: sans-serif;"
+											style="text-align: right; font-size: 18px; color: #014A39; font-family: 'Poppins-Regular';"
 											th:text="'متراژ خانه : '+ ${home.getHouseArea()}"></p>
 										<p class="card-text"
-											style="text-align: right; font-size: 18px; color: #014A39; font-family: sans-serif;"
+											style="text-align: right; font-size: 18px; color: #014A39; font-family: 'Poppins-Regular';"
 											th:text="'قیمت کل : '+ ${home.getTotalPrice()}"></p>
 										<p class="card-text"
-											style="text-align: right; font-size: 18px; color: #014A39; font-family: sans-serif;"
+											style="text-align: right; font-size: 18px; color: #014A39; font-family: 'Poppins-Regular';"
 											th:text="' توضیحات : '+ ${home.getDescription()}"></p>
 
 										<a th:href="@{/home/homeDetails/{id}(id=${home.getId()})}"
@@ -326,7 +347,7 @@ section .section-title {
 
 
 
-	<div class="container-contact100" dir="rtl" id="ContactUs">
+	<div class="container-contact100" dir="rtl" id="ContactUs" >
 		<div class="wrap-contact100">
 			<form class="contact100-form validate-form">
 				<span class="contact100-form-title">پیامی برای ما بفرستید</span> <label
@@ -400,28 +421,12 @@ section .section-title {
 
 
 
+	<div style="margin-top: 60px;" th:replace="pages/fragments/layout::footer"></div>
+
+
 	<!-- Image of location/map -->
-	<img src="img/footer5.jpg" class="img-responsive" style="width: 100%">
+<!--	<img id="imgFooter" src="img/footer5.jpg" class="img-responsive" style="width: 100%">-->
 
-
-	<!-- <div class="container-fluid mt-3 pl-5 pr-5" style="background-color: #E8E6E6"> -->
-
-	<!--     <a th:each="home : ${homes}" th:href="@{/home/homeDetails/{id}(id=${home.getId()})}" class="text-dark"> -->
-	<!--         <div class="card mr-3 mb-4 col-sm-3" style=" float: left;margin: 20px"> -->
-	<!--                <img class="card-img-top border-bottom border-secondary" style="width: 17.5rem;height:10rem" th:src="'/img/'+ ${home.getHomePictures()}" onerror="this.src='/img/1.png'" alt="not found"> -->
-
-	<!--             <div class="card-body" style="color:black"> -->
-	<!--                 <h5 class="card-title" style="float:right" th:text="${home.getTitle()}"/> -->
-	<!--                 <br> -->
-	<!--                 <p class="card-text text-truncate" th:text="${home.getDescription()}" /> -->
-	<!--             </div> -->
-	<!--             <div class="card-footer"> -->
-	<!--                 <p class="text-center small text-muted m-0 p-0" th:text="'Last Updated : '+ -->
-	<!--                 ${#temporals.format(home.getUpdatedAt(),'yyyy-MM-dd HH:mm')}"></p> -->
-	<!--             </div> -->
-	<!--         </div> -->
-	<!--     </a> -->
-	<!-- </div> -->
 
 	<script>
 		$(document).ready(
@@ -454,8 +459,14 @@ section .section-title {
 								} // End if
 							});
 					
-					$( "*[id*='img0']" ).css("display","block")
+					$( "*[id*='img0']" ).css("display","block");
+
 				});
+
+
+
+
+
 
 		function getCitiesByProvinceId() {
 			var pid = $("#provinceSelect").find(":selected").val();
@@ -485,13 +496,40 @@ section .section-title {
 
 		}
 	</script>
+	<script type="text/javascript">
 
-	<script src="https://code.jquery.com/jquery-3.6.0.js"
-		integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
-		crossorigin="anonymous"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+		window.onscroll= ()=> {
+			var myNav=document.querySelector('nav');
+			"use strict";
+			if((document.body.scrollTop > 400 || document.documentElement.scrollTop>400)){
+				// myNav.classList.add("nav-colored-trans20");
+				// myNav.classList.remove("");
+				const percent=Math.round(document.documentElement.scrollTop*0.02);
+				myNav.classList.add("nav-colored-trans".concat(percent));
+				console.log(percent);
+
+
+			}
+
+			else
+			{
+				myNav.classList.remove("nav-colored-trans10");
+				myNav.classList.remove("nav-colored-trans20");
+				myNav.classList.remove("nav-colored-trans30");
+				myNav.classList.remove("nav-colored-trans40");
+				myNav.classList.remove("nav-colored-trans50");
+				myNav.classList.remove("nav-colored-trans60");
+				myNav.classList.remove("nav-colored-trans70");
+				myNav.classList.remove("nav-colored-trans80");
+				// myNav.classList.add("");
+
+			}
+		}
+	</script>
+
+	<script src="/js/jquery-3.6.0.min.js"></script>
+	<script src="/js/bootstrap.bundle.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
 </body>
 </html>

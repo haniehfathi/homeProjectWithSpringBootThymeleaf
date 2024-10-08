@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="js/slidebar.js"></script>
+    <link rel="stylesheet" th:href="@{/css/addHomeStyle.css}"/>
+    <link href="/css/fontawesome-free-5.15.4-web/css/all.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/slidebarStyle.css}" type="text/css"/>
+    <style>
+
+        body {
+            background-image: url('/img/profile.jpg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            height: 100%;
+            width: 100%;
+            font-family: 'Poppins-Regular';
+        }
+
+        p {
+            text-align: right;
+            font-size: 18px;
+            color: #014A39;
+            font-family: 'Poppins-Regular';
+        }
+
+        #sidebar, #sidebar .custom-menu .btn.btn-primary:after {
+            background: none;
+        }
+
+        #wrapper {
+            overflow: hidden;
+        }
+        .model-4 a {
+
+            margin: 0 5px;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            border-radius: 50px;
+            background-color: #edf4ff;
+            color: black;
+            font-family: Poppins-Regular;
+            font-size: 17px
+        }
+
+        #showHomes {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        button {
+            background: none;
+            color: inherit;
+            border: none;
+            padding: 0;
+            font: inherit;
+            cursor: pointer;
+            outline: inherit;
+        }
+    </style>
+</head>
+<body style="">
+<div class="container-fluid">
+    <div id="first" dir="rtl">
+        <nav id="sidebar">
+
+            <div class="p-4">
+                <h4><a style="font-family: Poppins-Regular;font-size: 23px;color: white "
+                       th:href="@{/user/profile/userInfo}" class="logo"
+                       th:text=" ${user.getName()} + ' ' + ${user.getFamily()}"> </a></h4>
+                <ul class="list-unstyled components mb-5">
+                    <li class="active">
+                        <button onclick="showInfoFunc()">
+                            <a th:href="@{/user/profile/userInfo#showInfo}"><span class="mr-3"></span>مشاهده ی
+                                اطلاعات شخصی</a>
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showHomesFunc()">
+                            <a th:href="@{/user/profile/allHome}"><span class=" mr-3"></span> نمایش
+                                تمام خانه های من </a>
+                        </button>
+                    </li>
+
+                    <li>
+                        <button onclick="showChangePassFunc()">
+                            <a th:href="@{/user/profile/userInfo#showChangePass}"><span
+                                    class=" mr-3"></span>تغییر رمز عبور</a>
+                        </button>
+                    </li>
+
+
+                </ul>
+
+
+            </div>
+        </nav>
+    </div>
+    <div id="wrapper" class="container" style="">
+        <div id="editHome" style="display: block;background-color: white">
+            <div class="section" style="background-color: white;margin:80px 50px 80px  50px">
+                <div class="" dir="rtl">
+                    <div class="booking-form right">
+                        <form th:action="@{/user/home/edit}" method="post" th:object="${home}"
+                              enctype="multipart/form-data">
+                            <div class="row">
+                                <input type="hidden" th:field="*{id}">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <span class="form-label">عنوان: </span>
+                                        <input class="form-control" type="text" th:field="*{title}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="label mt-4 ml-1">استان: </label>
+                                        <select th:field="*{province}"
+                                                class="form-control " id="provinceSelect" name="province"
+                                                onchange="javascript:getCitiesByProvinceId();">
+                                            <option value="-1" hidden>انتخاب کنید ...</option>
+                                            <option th:each="province : ${provinces}"
+                                                    th:value="${province.getId()}"
+                                                    th:text="${province.getTitle()}">
+                                        </select>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="label mt-4 ml-1">شهر: </label>
+                                        <select th:field="*{city}"
+                                                class="form-control " id="citySelect" name="city">
+                                            <option value="-1" hidden>انتخاب کنید ...</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <span class="form-label">منطقه: </span>
+                                        <input class="form-control" type="text" th:field="*{zone}">
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <span class="form-label">آدرس: </span>
+                                        <input class="form-control" type="text" th:field="*{address}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="label mt-4 ml-1">نوع ملک: </label>
+                                        <select class="form-control " id="catSelect" name="category"
+                                                th:field="*{category}">
+                                            <option value="-1" hidden>انتخاب کنید ...</option>
+                                            <option th:each="cat : ${categories}"
+                                                    th:value="${cat.getId()}" th:text="${cat.getTitle()}">
+                                        </select>
+                                        <span class="select-arrow"></span>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <span class="form-label">قیمت کل: </span>
+                                        <input class="form-control" type="number" th:field="*{totalPrice}">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <span class="form-label">قیمت هر متر: </span>
+                                        <input class="form-control" type="number" th:field="*{pricePerMeter}">
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="label mt-4 ml-1">سال ساخت: </label>
+                                        <input class="form-control" type="number" th:field="*{yearOfConstruction}">
+
+                                        <!--                                <select class="form-control "  th:field="*{yearOfConstruction}">-->
+                                        <!--                                    <option value="-1" hidden>انتخاب کنید ...</option>-->
+                                        <!--                                    <option>1400</option>-->
+                                        <!--                                    <option>1399</option>-->
+                                        <!--                                    <option>1398</option>-->
+                                        <!--                                    <option>1397</option>-->
+                                        <!--                                    <option>1396</option>-->
+                                        <!--                                    <option>1395</option>-->
+                                        <!--                                    <option>1394</option>-->
+                                        <!--                                    <option>1393</option>-->
+                                        <!--                                    <option>1392</option>-->
+                                        <!--                                    <option>1391</option>-->
+                                        <!--                                    <option>1390</option>-->
+                                        <!--                                    <option>1389</option>-->
+                                        <!--                                    <option>1388</option>-->
+                                        <!--                                    <option>1387</option>-->
+                                        <!--                                    <option>1386</option>-->
+                                        <!--                                    <option>1385</option>-->
+                                        <!--                                    <option>1384</option>-->
+                                        <!--                                    <option>1383</option>-->
+                                        <!--                                    <option>1382</option>-->
+                                        <!--                                    <option>1381</option>-->
+                                        <!--                                    <option>1380</option>-->
+                                        <!--                                    <option>1379</option>-->
+                                        <!--                                    <option>1378</option>-->
+                                        <!--                                    <option>1377</option>-->
+                                        <!--                                    <option>1376</option>-->
+                                        <!--                                    <option>1375</option>-->
+                                        <!--                                    <option>1374</option>-->
+                                        <!--                                    <option>1373</option>-->
+                                        <!--                                    <option>1372</option>-->
+                                        <!--                                    <option>1371</option>-->
+                                        <!--                                    <option>1370</option>-->
+                                        <!--                                    <option>قبل از 1370</option>-->
+                                        <!--                                </select>-->
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <span class="form-label">متراژ کل: </span>
+                                        <input class="form-control" type="number" th:field="*{totalArea}">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <span class="form-label">متراژ خانه: </span>
+                                        <input class="form-control" type="number" th:field="*{houseArea}">
+                                    </div>
+                                </div>
+
+
+                                <!--                        <div class="col-md-3">-->
+                                <!--                            <div class="form-group">-->
+                                <!--                                <span class="form-label">تعداد دانگ خانه برای فروش : </span>-->
+                                <!--                                <input class="form-control" type="text"  th:object="${countOfPortions}">-->
+                                <!--                            </div>-->
+                                <!--                        </div>-->
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <span class="form-label">تعداد پارکینگ :  </span>
+                                        <input class="form-control" type="number" th:field="*{countOfParking}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <span class="form-label">نورگیری ساختمان :  </span>
+                                        <input class="form-control" type="text" th:field="*{lighting}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <span class="form-label">نمای بیرونی ساختمان :  </span>
+                                        <input class="form-control" type="text" th:field="*{view}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <span class="form-label">تعداد اتاق خواب :  </span>
+                                        <input class="form-control" type="text" th:field="*{numberOfBedrooms}">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <span class="form-label">تعداد سرویس های بهداشتی :  </span>
+                                        <input class="form-control" type="text" th:field="*{numberOfToilets}">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <span class="form-label">تعداد حمام :  </span>
+                                        <input class="form-control" type="text" th:field="*{numberOfBathrooms}">
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="row">
+
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <span class="form-label"> توضیحات :   </span>
+                                        <input class="form-control" type="text" th:field="*{description}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group" style="margin-top: 50px;margin-right:15px;">
+                                        <input type="checkbox" id="interchangeable" name="interchangeable"
+                                               style="transform: scale(1.5);" th:field="*{interchangeable}">
+                                        <label style="font-size: 24px;margin-right: 10px;" for="interchangeable">قابلیت
+                                            تعویض</label>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <span class="form-label"> امکانات :   </span>
+                                        <input class="form-control" type="text" th:field="*{facilities}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="margin-top: 50px">
+                                    <div class="form-group ">
+                                        <input class="form-control-file" th:field="*{file}" id="cover" type="file"
+                                               accept=".jpg, .jpeg, .png" multiple>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6"></div>
+                                <div class="col-sm-4 " dir="ltr">
+                                    <button dir="ltr" class=" form-group btn-submit m-b-0 btn btn-info"
+                                            style="font-size: 22px;background-color: #4272d7;color: white;margin-top: 40px;margin-left:50px;width: 150px"
+                                            type="submit">ثبت
+                                    </button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+</script>
+
+<script src="/js/jquery-3.6.0.min.js"></script>
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+</body>
+</html>

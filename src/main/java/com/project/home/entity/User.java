@@ -18,6 +18,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -33,26 +34,32 @@ public class User implements Serializable {
 	@Id
 	@GeneratedValue
 	public Long id;
-	
-	@NotBlank
+
+	@NotBlank(message = "نام کاربر نباید خالی باشد")
 	public String name;
-	
-	@NotBlank
+
+	@NotBlank(message = "نام خانوادگی کاربر نباید خالی باشد")
 	public String family;
 	
-	@Email
-	@NotBlank
+	@Email(message = "لطفا مقدار درست را وارد نمایید")
+	@NotBlank(message = "ایمیل کاربر نباید خالی باشد")
 	@Column(unique = true)
 	public String email;
-	
-	@NotBlank
+
+	@NotBlank(message = "شماره همراه کاربر نباید خالی باشد")
 	public String mobile;
 	
 	@Max(value=2)
 	public short sex;
-	
-	@NotBlank
+
+	@NotBlank(message = "رمز عبور کاربر نباید خالی باشد")
 	public String password;
+
+	@Transient
+	public String newPassword;
+
+	@Transient
+	public String oldPassword;
 	
 	@CreationTimestamp
 	@Column(name = "created_at",updatable = false)
@@ -70,7 +77,11 @@ public class User implements Serializable {
 	@JsonIgnore
 	@Transient
 	public MultipartFile file;
-	
+
+	@JsonIgnore
+	@Transient
+	public boolean isAuthenticated;
+
 	public String cover;
 	
 	public Boolean enabled=true;
@@ -256,4 +267,35 @@ public class User implements Serializable {
 		this.home = home;
 	}
 
+	public boolean getIsAuthenticated() {
+		return isAuthenticated;
+	}
+
+	public void setIsAuthenticated(boolean authenticated) {
+		isAuthenticated = authenticated;
+	}
+
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
+
+	public String getOldPassword() {
+		return oldPassword;
+	}
+
+	public void setOldPassword(String oldPassword) {
+		this.oldPassword = oldPassword;
+	}
+
+	public boolean isAuthenticated() {
+		return isAuthenticated;
+	}
+
+	public void setAuthenticated(boolean authenticated) {
+		isAuthenticated = authenticated;
+	}
 }

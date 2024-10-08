@@ -17,7 +17,7 @@ public class Category {
 	@GeneratedValue
 	public Long id;
 	
-	@NotBlank
+	@NotBlank(message = "عنوان نباید خالی باشد")
 	public String title;
 	
 	@ManyToMany(mappedBy = "category")

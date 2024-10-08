@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html lang="en" xmlns:th="http://www.thymeleaf">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+            <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+
+            <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+            <link href="/css/bootstrap.css" rel="stylesheet"/>
+
+            <link rel="stylesheet" th:href="@{/css/navbarPages.css}" type="text/css"/>
+
+        </head>
+
+    <link rel="stylesheet" href="../../../static/css/font-awesome.min.css">
+<body>
+<div th:fragment="navbar">
+    <section class="ftco-section">
+
+        <div class="container" dir="rtl">
+            <div class="row justify-content-between">
+                <div class="col" style="text-align: right;font-family: Poppins-Regular;">
+                    <a class="navbar-brand" href="/#" style="font-size: 35px;">عمارت <span style="font-size: 30px;">سایت خرید و فروش ملک</span></a>
+                </div>
+                <div class="col d-flex justify-content-end" >
+                    <div class="social-media">
+                        <p class="mb-0 d-flex" >
+                            <a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-facebook"><i class="sr-only">Facebook</i></span></a>
+                            <a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-twitter"><i class="sr-only">Twitter</i></span></a>
+                            <a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-instagram"><i class="sr-only">Instagram</i></span></a>
+                            <a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-dribbble"><i class="sr-only">Dribbble</i></span></a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+            <div class="container">
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="fa fa-bars"></span> Menu
+                </button>
+
+                <div class="collapse navbar-collapse" id="ftco-nav" dir="rtl">
+                    <ul class="navbar-nav mr-auto">
+
+
+                        <li class="nav-item"><a class="nav-link" href="/#" style="margin-right: 50px;font-family: Poppins-Regular;font-size: 15px">خانه</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#Search" style="font-family: Poppins-Regular;font-size: 17px">جستجوی
+                            پیشرفته</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#lastHomes" style="font-family: Poppins-Regular;font-size: 17px">آخرین
+                            خانه ها </a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#ContactUs" style="font-family: Poppins-Regular;font-size: 17px">ارتباط
+                            با ما</a></li>
+
+                        <li th:if="${isAuth} == true" class="nav-item">
+                            <a class="nav-link" href="/home/addHome" style="font-family: Poppins-Regular;font-size: 17px">ثبت خانه جدید</a>
+                        </li>
+                        <li th:unless="${isAuth} == true" class="nav-item">
+                            <a class="nav-link" href="/login" style="font-family: Poppins-Regular;font-size: 17px">ثبت خانه جدید</a>
+                        </li>
+
+                    </ul>
+                </div>
+
+            </div>
+        </nav>
+        <!-- END nav -->
+
+    </section>
+
+</div>
+
+<script src="/js/jquery-3.6.0.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap-4.3.1.js"></script>
+<script src="js/navbarPages.js"></script>
+</body>
+</html>

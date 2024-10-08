@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <link rel="stylesheet" th:href="@{/css/footerStyle.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/navbarPages.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/style_searchForm.css}"/>
+    <script src="js/slidebar.js"></script>
+    <link rel="stylesheet" th:href="@{/css/slidebarStyle.css}" type="text/css"/>
+    <link href="/css/fontawesome-free-5.15.4-web/css/all.min.css" rel="stylesheet" type="text/css"/>
+
+    <style>
+        #wrapper {
+            overflow: hidden;
+        }
+
+        #first {
+            width: 300px;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+
+<div style="background-color: #868e96" th:replace="pages/fragments/navbarLayout::navbar"></div>
+
+<div id="wrapper" class="container-fluid">
+    <div id="first" class="">
+        <nav id="sidebar">
+            <div class="custom-menu">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                    <i class="fa fa-chevron-right"></i>
+                    <span class="sr-only">Toggle Menu</span>
+                </button>
+            </div>
+            <div class="p-4">
+                <h1><a th:href="@{/admin/home/allHomes}" class="logo">مدیریت سایت </a></h1>
+                <ul class="list-unstyled components mb-5">
+                    <li class="active">
+                        <a th:href="@{/admin/home/allHomes}"><span class=" mr-3"></span> نمایش تمام خانه
+                            ها</a>
+                    </li>
+                    <li class="">
+                        <a th:href="@{/admin/home/enableHomes}"><span class=" mr-3"></span> نمایش خانه های غیر فعال</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/home/addHome}"><span class=" mr-3"></span> ثبت خانه ی جدید</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/user/allUsers}"><span class="mr-3"></span> نمایش تمام
+                            کاربران</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/user/addUser}"><span class="mr-3"></span> ثبت کاربر جدید</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/category/allCategories}"><span class=" mr-3"></span> نمایش
+                            تمام انواع خانه ها</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/category/addCategory}"><span class=" mr-3"></span> ثبت نوع
+                            جدید</a>
+                    </li>
+                </ul>
+
+
+            </div>
+        </nav>
+    </div>
+    <div id="second" dir="rtl" style="margin: auto">
+        <div class="container-fluid" style="margin-bottom: 300px;" dir="rtl" id="allCat">
+            <div style="overflow-x: scroll ;margin-bottom: 50px">
+                <form id="search-form" th:action="@{/admin/category/allCategories}" method="get">
+                    <table class="table">
+                        <thead class="thead-light ">
+                        <tr>
+                            <th>
+                                <a type="button" class="btn btn-primary" style="width: 166px"
+                                   th:href="@{/admin/category/addCategory}">ثبت ملک جدید</a>
+                            </th>
+                        </tr>
+                        <tr style="padding-bottom: 200px">
+                            <div style=" background-color: #868e96;padding: 10px">
+                                <div class="row ">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="label mt-4">عنوان: </label>
+                                            <input
+                                                    class="input--style-1" type="text" name="title"
+                                                    placeholder="عنوان نوع خانه ی موردنظر">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2 ">
+                                        <button dir="ltr" class=" form-group btn-submit m-b-0 "
+                                                type="submit">جستجو
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </tr>
+
+                        <tr>
+                            <!--                <th scope="col">شناسه</th>-->
+                            <th scope="col">عنوان</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="cat : ${categories}">
+
+
+                            <td>
+                                <a th:text="${#strings.abbreviate(cat.title ,50)}" class="text-dark"> </a>
+                            </td>
+                            <td>
+                                <a class="btn btn-success"
+                                   style="width: 80px"
+                                   th:href="@{/admin/category/edit/{id}(id=${cat.getId()})}">ویرایش</a>
+
+                                <a class="btn btn-danger"
+                                   data-toggle="modal"
+                                   href="#"
+                                   style="width: 80px" th:data-target="'#delete'+${cat.getId()}">
+                                    حذف
+                                </a>
+
+                                <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade"
+                                     role="dialog"
+                                     tabindex="-1" th:id="'delete'+${cat.getId()}">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Delete Category</h5>
+                                                <button aria-label="Close" class="close" data-dismiss="modal"
+                                                        type="button">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <span th:text="'آیا از حذف نوع'"></span>
+                                                <strong th:text="${cat.getTitle()}"></strong>
+                                                <span th:text="'مطمئنید؟ '"></span>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-secondary" data-dismiss="modal" type="button">
+                                                    بستن
+                                                </button>
+                                                <a class="btn btn-danger"
+                                                   th:href="@{/admin/category/delete/{id}(id=${cat.getId()})}">حذف</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div style="margin-top: 80px;" th:replace="pages/fragments/layout::footer"></div>
+<script>
+    (function ($) {
+
+        "use strict";
+
+        var fullHeight = function () {
+
+            $('.js-fullheight').css('height', $(window).height());
+            $(window).resize(function () {
+                $('.js-fullheight').css('height', $(window).height());
+            });
+
+        };
+        fullHeight();
+
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+
+    })(jQuery);
+
+</script>
+
+<script>
+
+
+</script>
+</body>
+</html>

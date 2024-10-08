@@ -19,11 +19,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
 		.authorizeRequests()
-		.antMatchers("/login","/","/logout","/register","/user/register","/css/**", "/js/**", "/img/**","/home/**","/getCities/**")
+		.antMatchers("/login","/","/logout","/register","/css/**", "/js/**", "/img/**","/home/**","/getCities/**")
 		.permitAll()
+		.antMatchers("/admin/**").hasAuthority("ADMIN")
 		.anyRequest().authenticated().and()
-		.formLogin().loginPage("/login").successForwardUrl("/")
-		.usernameParameter("email").permitAll();
+		.formLogin().loginPage("/login").failureUrl("/login-error").successForwardUrl("/")
+		.usernameParameter("email").permitAll()
+		.and().rememberMe()
+		.and().exceptionHandling().accessDeniedPage("/errorPage")
+		.and().logout().deleteCookies("remember-me")
+		;
 	}
 
 	@Override

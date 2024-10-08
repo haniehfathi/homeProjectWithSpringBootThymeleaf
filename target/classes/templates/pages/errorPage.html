@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery-3.6.0.js"></script>
+    <link rel="stylesheet" th:href="@{/css/navbarPages.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/footerStyle.css}" type="text/css"/>
+    <link href="/css/fontawesome-free-5.15.4-web/css/all.min.css" rel="stylesheet" type="text/css"/>
+
+    <style>
+    body {
+        background-image: url('/img/access-deny.jpg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-attachment: fixed;
+        webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        height: 100%;
+        width: 100%;
+        font-family: 'Poppins-Regular';
+    }
+    #mydiv {
+        position:fixed;
+        top: 50%;
+        left: 38%;
+
+    }
+</style>
+</head>
+<body>
+<div id="mydiv" dir="rtl" >
+<!--    <h3 style="font-family: Poppins-Regular; top: 80%;left:50%;position: absolute;color: whitesmoke">-->
+<!--        شما دسترسی به این صفحه ندارید-->
+<!--    </h3>-->
+<a href="/">
+    <img src="/img/returnButton2.png" style="max-width: 300px" >
+</a>
+</div>
+
+
+
+
+</body>
+</html>

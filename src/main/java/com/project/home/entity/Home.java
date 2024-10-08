@@ -1,5 +1,6 @@
 package com.project.home.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,25 +15,23 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Home {
+public class Home  implements Serializable {
 
 	@Id
 	@GeneratedValue
 	public Long id;
 	
-	@NotBlank
+	@NotBlank(message = "عنوان نباید خالی باشد")
 	public String title;
 	
 	@ManyToOne
@@ -75,43 +74,45 @@ public class Home {
 	
 	public Long pricePerMeter;
 	
-	public int totalArea;
+	public Long totalArea;
 	
 	@Transient
-	public int totalAreaFrom;
+	public Long totalAreaFrom;
 	
 	@Transient
-	public int totalAreaTo;
-	
-	public int houseArea;
+	public Long totalAreaTo;
+
+	@NotNull(message = " متراژ خانه نباید خالی باشد")
+	public Long houseArea;
 	
 	public Boolean interchangeable=false;
 	
-	public short numberOfBathrooms;
+	public Long numberOfBathrooms;
 	
-	public short numberOfToilets;
+	public Long numberOfToilets;
 	
-	public short numberOfBedrooms;
+	public Long numberOfBedrooms;
 	
 	public String lighting;
 
 	public String view;
+
+	@Range(max = 6,min = 1,message = "تعداد سهم برای فروش حداقل 1 و حداکثر 6 سهم می باشد")
+	public Long countOfPortions;
 	
-	@Max(6)
-	@Min(1)
-	public short countOfPortions;
-	
-	public short countOfParking;
-	
-	public int yearOfConstruction;
-	
-	@Transient
-	public int yearOfConstructionFrom;
+	public Long countOfParking;
+
+	@NotNull(message = "سال ساخت خانه نباید خالی باشد")
+	public Long yearOfConstruction;
 	
 	@Transient
-	public int yearOfConstructionTo;
+	public Long yearOfConstructionFrom;
 	
+	@Transient
+	public Long yearOfConstructionTo;
 	
+	public boolean enabled;
+
 	public String facilities;
 	
 	@CreationTimestamp
@@ -126,10 +127,10 @@ public class Home {
 
 	public Home(Long id, @NotBlank String title, Province province, City city, User user,
 			@NotEmpty List<Category> category, String zone, String address, String description, List<HomePictures> homePictures,
-			List<MultipartFile> file, Long totalPrice, Long pricePerMeter, int totalArea, int houseArea,
-			Boolean interchangeable, short numberOfBathrooms, short numberOfToilets, short numberOfBedrooms,
-			String lighting, String view, @Max(6) @Min(1) short countOfPortions, short countOfParking,
-			int yearOfConstruction, String facilities, LocalDateTime createdAt, LocalDateTime updatedAt) {
+			List<MultipartFile> file, Long totalPrice, Long pricePerMeter, Long totalArea, Long houseArea,
+			Boolean interchangeable, Long numberOfBathrooms, Long numberOfToilets, Long numberOfBedrooms,
+			String lighting, String view, @Max(6) @Min(1) Long countOfPortions, Long countOfParking,
+				Long yearOfConstruction, String facilities, LocalDateTime createdAt, LocalDateTime updatedAt) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -163,9 +164,9 @@ public class Home {
 
 	public Home(@NotBlank String title, Province province, City city, User user, @NotEmpty List<Category> category,
 			String zone, String address, String description, List<HomePictures> homePictures, List<MultipartFile> file, Long totalPrice,
-			Long pricePerMeter, int totalArea, int houseArea, Boolean interchangeable, short numberOfBathrooms,
-			short numberOfToilets, short numberOfBedrooms, String lighting, String view,
-			@Max(6) @Min(1) short countOfPortions, short countOfParking, int yearOfConstruction, String facilities,
+			Long pricePerMeter, Long totalArea, Long houseArea, Boolean interchangeable, Long numberOfBathrooms,
+				Long numberOfToilets, Long numberOfBedrooms, String lighting, String view,
+			@Max(6) @Min(1) Long countOfPortions, Long countOfParking, Long yearOfConstruction, String facilities,
 			LocalDateTime createdAt, LocalDateTime updatedAt) {
 		super();
 		this.title = title;
@@ -201,10 +202,10 @@ public class Home {
 	
 
 	public Home(@NotBlank String title, Province province, City city, User user, String zone, String address,
-			String description, Long totalPrice, Long pricePerMeter, int totalArea, int houseArea,
-			Boolean interchangeable, short numberOfBathrooms, short numberOfToilets, short numberOfBedrooms,
-			String lighting, String view, @Max(6) @Min(1) short countOfPortions, short countOfParking,
-			int yearOfConstruction, String facilities,@NotEmpty List<Category> category) {
+			String description, Long totalPrice, Long pricePerMeter, Long totalArea, Long houseArea,
+			Boolean interchangeable, Long numberOfBathrooms, Long numberOfToilets, Long numberOfBedrooms,
+			String lighting, String view, @Max(6) @Min(1) Long countOfPortions, Long countOfParking,
+				Long yearOfConstruction, String facilities,@NotEmpty List<Category> category) {
 		super();
 		this.title = title;
 		this.category = category;
@@ -366,22 +367,22 @@ public class Home {
 	}
 
 
-	public int getTotalArea() {
+	public Long getTotalArea() {
 		return totalArea;
 	}
 
 
-	public void setTotalArea(int totalArea) {
+	public void setTotalArea(Long totalArea) {
 		this.totalArea = totalArea;
 	}
 
 
-	public int getHouseArea() {
+	public Long getHouseArea() {
 		return houseArea;
 	}
 
 
-	public void setHouseArea(int houseArea) {
+	public void setHouseArea(Long houseArea) {
 		this.houseArea = houseArea;
 	}
 
@@ -396,32 +397,32 @@ public class Home {
 	}
 
 
-	public short getNumberOfBathrooms() {
+	public Long getNumberOfBathrooms() {
 		return numberOfBathrooms;
 	}
 
 
-	public void setNumberOfBathrooms(short numberOfBathrooms) {
+	public void setNumberOfBathrooms(Long numberOfBathrooms) {
 		this.numberOfBathrooms = numberOfBathrooms;
 	}
 
 
-	public short getNumberOfToilets() {
+	public Long getNumberOfToilets() {
 		return numberOfToilets;
 	}
 
 
-	public void setNumberOfToilets(short numberOfToilets) {
+	public void setNumberOfToilets(Long numberOfToilets) {
 		this.numberOfToilets = numberOfToilets;
 	}
 
 
-	public short getNumberOfBedrooms() {
+	public Long getNumberOfBedrooms() {
 		return numberOfBedrooms;
 	}
 
 
-	public void setNumberOfBedrooms(short numberOfBedrooms) {
+	public void setNumberOfBedrooms(Long numberOfBedrooms) {
 		this.numberOfBedrooms = numberOfBedrooms;
 	}
 
@@ -446,32 +447,32 @@ public class Home {
 	}
 
 
-	public short getCountOfPortions() {
+	public Long getCountOfPortions() {
 		return countOfPortions;
 	}
 
 
-	public void setCountOfPortions(short countOfPortions) {
+	public void setCountOfPortions(Long countOfPortions) {
 		this.countOfPortions = countOfPortions;
 	}
 
 
-	public short getCountOfParking() {
+	public Long getCountOfParking() {
 		return countOfParking;
 	}
 
 
-	public void setCountOfParking(short countOfParking) {
+	public void setCountOfParking(Long countOfParking) {
 		this.countOfParking = countOfParking;
 	}
 
 
-	public int getYearOfConstruction() {
+	public Long getYearOfConstruction() {
 		return yearOfConstruction;
 	}
 
 
-	public void setYearOfConstruction(int yearOfConstruction) {
+	public void setYearOfConstruction(Long yearOfConstruction) {
 		this.yearOfConstruction = yearOfConstruction;
 	}
 
@@ -526,49 +527,50 @@ public class Home {
 	}
 
 
-	public int getTotalAreaFrom() {
+	public Long getTotalAreaFrom() {
 		return totalAreaFrom;
 	}
 
 
-	public void setTotalAreaFrom(int totalAreaFrom) {
+	public void setTotalAreaFrom(Long totalAreaFrom) {
 		this.totalAreaFrom = totalAreaFrom;
 	}
 
 
-	public int getTotalAreaTo() {
+	public Long getTotalAreaTo() {
 		return totalAreaTo;
 	}
 
 
-	public void setTotalAreaTo(int totalAreaTo) {
+	public void setTotalAreaTo(Long totalAreaTo) {
 		this.totalAreaTo = totalAreaTo;
 	}
 
 
-	public int getYearOfConstructionFrom() {
+	public Long getYearOfConstructionFrom() {
 		return yearOfConstructionFrom;
 	}
 
 
-	public void setYearOfConstructionFrom(int yearOfConstructionFrom) {
+	public void setYearOfConstructionFrom(Long yearOfConstructionFrom) {
 		this.yearOfConstructionFrom = yearOfConstructionFrom;
 	}
 
 
-	public int getYearOfConstructionTo() {
+	public Long getYearOfConstructionTo() {
 		return yearOfConstructionTo;
 	}
 
 
-	public void setYearOfConstructionTo(int yearOfConstructionTo) {
+	public void setYearOfConstructionTo(Long yearOfConstructionTo) {
 		this.yearOfConstructionTo = yearOfConstructionTo;
 	}
-	
 
-	
-	
-	
-	
+	public boolean isEnabled() {
+		return enabled;
+	}
 
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 }

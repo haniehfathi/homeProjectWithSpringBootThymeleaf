@@ -116,40 +116,12 @@ button {
 .page-wrapper {
   min-height: 100vh;
 }
-
 body {
-  font-family: "Poppins", "Arial", "Helvetica Neue", sans-serif;
-  font-weight: 300;
-  font-size: 12px;
+  font-family:'Poppins-Regular';
+  font-size: 16px;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 300;
-}
 
-h1 {
-  font-size: 36px;
-}
-
-h2 {
-  font-size: 30px;
-}
-
-h3 {
-  font-size: 24px;
-}
-
-h4 {
-  font-size: 18px;
-}
-
-h5 {
-  font-size: 15px;
-}
-
-h6 {
-  font-size: 13px;
-}
 
 img {
   max-width: 100%;
@@ -186,10 +158,10 @@ a:active {
    #BACKGROUND
    ========================================================================== */
 .bg-img-3 {
-  background: url("../img/bg-img-02.jpg") center center/cover no-repeat;
+  background: url("../img/search3.jpg") center center/cover no-repeat;
 }
 .bg-img-1 {
-  background: url("../img/bg-img-01.jpg") center center/cover no-repeat;
+  background: url("../img/search1.jpg") center center/cover no-repeat;
 }
 
 

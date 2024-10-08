@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <link rel="stylesheet" th:href="@{/css/footerStyle.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/navbarPages.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/addHomeStyle.css}"/>
+    <script src="js/slidebar.js"></script>
+
+    <link rel="stylesheet" th:href="@{/css/slidebarStyle.css}" type="text/css"/>
+    <link href="/css/fontawesome-free-5.15.4-web/css/all.min.css" rel="stylesheet" type="text/css"/>
+
+    <style>
+        body {
+            font-family: Poppins-Regular;
+            font-size: 18px;
+        }
+
+        #wrapper {
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #first {
+            width: 300px;
+            float: left;
+        }
+
+        #second {
+            width: 80%;
+        }
+        .validation {
+            margin-top: 10px;
+            color: #e8200e;
+            font-size: 16px;
+        }
+
+        .validation:before {
+            content: '*';
+            margin-right: 3px;
+        }
+    </style>
+
+</head>
+<body>
+
+<div style="background-color: #868e96" th:replace="pages/fragments/navbarLayout::navbar"></div>
+
+<div id="wrapper" class="container-fluid">
+    <div id="first" class="">
+        <nav id="sidebar">
+            <div class="custom-menu">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                    <i class="fa fa-chevron-right"></i>
+                    <span class="sr-only">Toggle Menu</span>
+                </button>
+            </div>
+            <div class="p-4">
+                <h1><a th:href="@{/admin/home/allHomes}" class="logo">مدیریت سایت </a></h1>
+                <ul class="list-unstyled components mb-5">
+                    <li class="active">
+                        <a th:href="@{/admin/home/allHomes}"><span class="mr-3"></span> نمایش تمام خانه
+                            ها</a>
+                    </li>
+                    <li class="">
+                        <a th:href="@{/admin/home/enableHomes}"><span class="mr-3"></span> نمایش خانه های غیر فعال</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/home/addHome}"><span class=" mr-3"></span> ثبت خانه ی جدید</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/user/allUsers}"><span class=" mr-3"></span> نمایش تمام
+                            کاربران</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/user/addUser}"><span class="mr-3"></span> ثبت کاربر جدید</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/category/allCategories}"><span class="mr-3"></span> نمایش
+                            تمام انواع خانه ها</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/category/addCategory}"><span class="mr-3"></span> ثبت نوع
+                            جدید</a>
+                    </li>
+
+                </ul>
+
+
+            </div>
+        </nav>
+    </div>
+    <div id="second" dir="rtl" style="margin: auto;background-color: #adb9c3">
+        <div id="booking container col-sm-12" class="section"
+             style="background-color: white;margin:80px 50px 80px 50px">
+            <div class="section-center col-sm-9" dir="rtl" id="addHome">
+                <div class="booking-form right">
+                    <form th:action="@{/admin/home/addHome}" method="post" th:object="${home}"
+                          enctype="multipart/form-data">
+                        <div class="row">
+                            <input type="hidden" th:field="*{id}">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <span class="form-label">عنوان: </span>
+                                    <input class="form-control" type="text" th:field="*{title}">
+                                    <div class="validation" th:if="${#fields.hasErrors('title')}"
+                                         th:errors="*{title}"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="label mt-4 ml-1">استان: </label>
+                                    <select th:field="*{province}"
+                                            class="form-control " id="provinceSelect" name="province"
+                                            onchange="javascript:getCitiesByProvinceId();">
+                                        <option value="-1" hidden>انتخاب کنید ...</option>
+                                        <option th:each="province : ${provinces}"
+                                                th:value="${province.getId()}"
+                                                th:text="${province.getTitle()}">
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="label mt-4 ml-1">شهر: </label>
+                                    <select th:field="*{city}"
+                                            class="form-control " id="citySelect" name="city">
+                                        <option value="-1" hidden>انتخاب کنید ...</option>
+
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <span class="form-label">منطقه: </span>
+                                    <input class="form-control" type="text" th:field="*{zone}">
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <span class="form-label">آدرس: </span>
+                                    <input class="form-control" type="text" th:field="*{address}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="label mt-4 ml-1">نوع ملک: </label>
+                                    <select class="form-control " id="catSelect" name="category"
+                                            th:field="*{category}">
+                                        <option value="-1" hidden>انتخاب کنید ...</option>
+                                        <option th:each="cat : ${categories}"
+                                                th:value="${cat.getId()}" th:text="${cat.getTitle()}">
+                                    </select>
+                                    <span class="select-arrow"></span>
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <span class="form-label">قیمت کل: </span>
+                                    <input class="form-control" type="number" th:field="*{totalPrice}">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <span class="form-label">قیمت هر متر: </span>
+                                    <input class="form-control" type="number" th:field="*{pricePerMeter}">
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="label mt-4 ml-1">سال ساخت: </label>
+                                    <input class="form-control" type="number" th:field="*{yearOfConstruction}">
+                                    <div class="validation" th:if="${#fields.hasErrors('yearOfConstruction')}"
+                                         th:errors="*{yearOfConstruction}"></div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <span class="form-label">متراژ کل: </span>
+                                    <input class="form-control" type="number" th:field="*{totalArea}">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <span class="form-label">متراژ خانه: </span>
+                                    <input class="form-control" type="number" th:field="*{houseArea}">
+                                    <div class="validation" th:if="${#fields.hasErrors('houseArea')}"
+                                         th:errors="*{houseArea}"></div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <span class="form-label">تعداد پارکینگ :  </span>
+                                    <input class="form-control" type="number" th:field="*{countOfParking}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <span class="form-label">نورگیری ساختمان :  </span>
+                                    <input class="form-control" type="text" th:field="*{lighting}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <span class="form-label">نمای بیرونی ساختمان :  </span>
+                                    <input class="form-control" type="text" th:field="*{view}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <span class="form-label">تعداد اتاق خواب :  </span>
+                                    <input class="form-control" type="text" th:field="*{numberOfBedrooms}">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <span class="form-label">تعداد سرویس های بهداشتی :  </span>
+                                    <input class="form-control" type="text" th:field="*{numberOfToilets}">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <span class="form-label">تعداد حمام :  </span>
+                                    <input class="form-control" type="text" th:field="*{numberOfBathrooms}">
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <span class="form-label">تعداد دانگ خانه برای فروش : </span>
+                                    <input class="form-control" type="text" th:field="*{countOfPortions}">
+                                    <div class="validation" th:if="${#fields.hasErrors('countOfPortions')}"
+                                         th:errors="*{countOfPortions}"></div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group" style="margin-top: 50px;margin-right:15px;">
+                                    <input type="checkbox" id="interchangeable" name="interchangeable"
+                                           style="transform: scale(1.5);" th:field="*{interchangeable}">
+                                    <label style="font-size: 24px;margin-right: 10px;" for="interchangeable">قابلیت
+                                        تعویض</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4" style="margin-top: 50px">
+                                <div class="form-group ">
+                                    <input class="form-control-file" th:field="*{file}" id="cover" type="file"
+                                           accept=".jpg, .jpeg, .png" multiple>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <span class="form-label"> توضیحات :   </span>
+                                    <input class="form-control" type="text" th:field="*{description}">
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <span class="form-label"> امکانات :   </span>
+                                    <input class="form-control" type="text" th:field="*{facilities}">
+                                </div>
+                            </div>
+                            <div class="col-sm-1 " dir="ltr"></div>
+                            <div class="col-sm-3 " dir="ltr">
+                                <button dir="ltr" class=" form-group btn-submit m-b-0 btn btn-info"
+                                        style="font-size: 22px;background-color: #4272d7;color: white;margin-top: 40px;margin-left:50px;width: 150px"
+                                        type="submit">ثبت
+                                </button>
+                            </div>
+
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="margin-top: 80px;" th:replace="pages/fragments/layout::footer" id="addHomeFooter"></div>
+
+
+<script>
+
+    function getCitiesByProvinceId() {
+        console.log("hellooo")
+        var pid = $("#provinceSelect").find(":selected").val();
+        var url = "/getCities/" + pid;
+        console.log(url)
+        $
+            .ajax({
+                type: 'GET',
+                url: url,
+                success: function (data) {
+                    var cSelect = $('#citySelect'), option = "", option0 = "";
+                    cSelect.empty()
+                    for (var i = 0; i < data.length; i++) {
+                        option = option
+                            + "<option value='" + data[i].id + "'>"
+                            + data[i].title + "</option>";
+                    }
+                    option0 = "<option value='0' hidden>انتخاب کنید ...</option>";
+                    cSelect.append(option0);
+                    cSelect.append(option);
+                },
+                error: function () {
+                    console("error");
+                }
+
+            })
+
+    }
+</script>
+<script>
+    (function ($) {
+
+        "use strict";
+
+        var fullHeight = function () {
+
+            $('.js-fullheight').css('height', $(window).height());
+            $(window).resize(function () {
+                $('.js-fullheight').css('height', $(window).height());
+            });
+
+        };
+        fullHeight();
+
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+
+    })(jQuery);
+
+</script>
+</body>
+</html>

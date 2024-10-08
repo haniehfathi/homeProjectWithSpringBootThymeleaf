@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <link rel="stylesheet" th:href="@{/css/footerStyle.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/navbarPages.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/style_searchForm.css}"/>
+    <script src="js/slidebar.js"></script>
+
+    <link rel="stylesheet" th:href="@{/css/slidebarStyle.css}" type="text/css"/>
+    <link href="/css/fontawesome-free-5.15.4-web/css/all.min.css" rel="stylesheet" type="text/css"/>
+
+    <style>
+
+
+        table {
+            white-space: nowrap;
+        }
+
+        .model-4 a {
+
+            margin: 0 5px;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            border-radius: 50px;
+            background-color: #edf4ff;
+            color: black;
+            font-family: Poppins-Regular;
+            font-size: 17px
+        }
+        #wrapper {
+            overflow: hidden;
+        }
+
+        #first {
+            width: 300px;
+            float: left;
+        }
+
+    </style>
+</head>
+<body>
+
+<div style="background-color: #868e96" th:replace="pages/fragments/navbarLayout::navbar"></div>
+
+<div id="wrapper" class="container-fluid">
+    <div id="first" class="">
+        <nav id="sidebar">
+            <div class="custom-menu">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                    <i class="fa fa-chevron-right"></i>
+                    <span class="sr-only">Toggle Menu</span>
+                </button>
+            </div>
+            <div class="p-4">
+                <h1><a th:href="@{/admin/home/allHomes}" class="logo">مدیریت سایت </a></h1>
+                <ul class="list-unstyled components mb-5">
+                    <li class="active">
+                        <a th:href="@{/admin/home/allHomes}"><span class="mr-3"></span> نمایش تمام خانه
+                            ها</a>
+                    </li>
+                    <li class="">
+                        <a th:href="@{/admin/home/enableHomes}"><span class="mr-3"></span> نمایش خانه های غیر فعال</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/home/addHome}"><span class=" mr-3"></span> ثبت خانه ی جدید</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/user/allUsers}"><span class=" mr-3"></span> نمایش تمام
+                            کاربران</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/user/addUser}"><span class="mr-3"></span> ثبت کاربر جدید</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/category/allCategories}"><span class="mr-3"></span> نمایش
+                            تمام انواع خانه ها</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/category/addCategory}"><span class="mr-3"></span> ثبت نوع
+                            جدید</a>
+                    </li>
+
+                </ul>
+
+
+            </div>
+        </nav>
+    </div>
+    <div id="second" dir="rtl" style="margin: auto">
+        <div class="container-fluid col-sm-12" style="margin-bottom: 50px" dir="rtl" id="allHomes">
+            <div style="overflow-x: scroll ;margin-bottom: 50px">
+                <form id="search-form" th:action="@{/admin/home/allHomes}" method="get">
+                    <table class="table" style="  overflow-x: scroll;">
+                        <thead class="thead-light ">
+                        <tr>
+                            <th>
+                                <a type="button" class="btn btn-primary" style="width: 166px"
+                                   th:href="@{/admin/home/addHome}">ثبت ملک جدید</a>
+                            </th>
+                        </tr>
+                        <tr style="padding-bottom: 200px">
+                            <div style=" background-color: #868e96;padding: 10px">
+                                <div class="row row-space ">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="label mt-4">عنوان: </label> <input
+                                                class="input--style-1" type="text" name="title"
+                                                placeholder="عنوان خانه ی موردنظر">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label class="label mt-4 ml-1">نوع ملک: </label> <select
+                                                class="form-control " id="catSelect" name="category">
+                                            <option value="-1" hidden>انتخاب کنید ...</option>
+                                            <option th:each="cat : ${categories}"
+                                                    th:value="${cat.getId()}" th:text="${cat.getTitle()}">
+                                        </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label class="label mt-4 ml-1">استان: </label> <select
+                                                class="form-control " id="provinceSelect" name="province"
+                                                onchange="getCitiesByProvinceId()">
+                                            <option value="-1" hidden>انتخاب کنید ...</option>
+                                            <option th:each="province : ${provinces}"
+                                                    th:value="${province.getId()}"
+                                                    th:text="${province.getTitle()}">
+                                        </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label class="label mt-4 ml-1">شهر: </label> <select
+                                                class="form-control " id="citySelect" name="city">
+                                            <option value="0" hidden>انتخاب کنید ...</option>
+
+                                        </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="label mt-4">منطقه</label> <input
+                                                class="input--style-1" type="text" name="return"
+                                                id="input-end">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-space">
+
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="label mt-4">متراژ خانه از : </label> <input
+                                                class="input--style-1" type="number" value="0"
+                                                name="totalAreaFrom" id="input-start">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="label mt-4">متراژ خانه تا :</label> <input
+                                                class="input--style-1 " type="number" value="0"
+                                                name="totalAreaTo" id="input-start">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 ">
+                                        <div class="form-group">
+                                            <label class="label mt-4">قیمت از: </label> <input
+                                                class="input--style-1" type="number" value="0"
+                                                name="totalPriceFrom" id="input-start">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 ">
+                                        <div class="form-group">
+                                            <label class="label mt-4">قیمت تا:</label> <input
+                                                class="input--style-1 " type="number" value="0"
+                                                name="totalPriceTo" id="input-start">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-space">
+
+
+                                    <div class="col-sm-3 ">
+                                        <div class="form-group">
+                                            <label class="label mt-4">سال ساخت از: </label> <input
+                                                class="input--style-1" type="number" value="0"
+                                                name="yearOfConstructionFrom" id="input-start">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="label mt-4">سال ساخت تا:</label> <input
+                                                class="input--style-1 " type="number" value="0"
+                                                name="yearOfConstructionTo" id="input-start">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4"></div>
+
+                                    <div class="col-sm-2 ">
+                                        <button dir="ltr" class=" form-group btn-submit m-b-0 "
+                                                type="submit">جستجو
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <th></th>
+                            <th></th>
+
+
+                        </tr>
+
+                        <tr>
+                            <!--                <th scope="col">شناسه</th>-->
+                            <th scope="col">عنوان</th>
+                            <th scope="col">استان</th>
+                            <th scope="col">شهر</th>
+                            <th scope="col">منطقه</th>
+                            <th scope="col">آدرس</th>
+                            <th scope="col">نوع ملک</th>
+                            <th scope="col">سال ساخت</th>
+                            <th scope="col">متراژ زمین</th>
+                            <th scope="col">متراژ خانه</th>
+                            <th scope="col">قیمت کل</th>
+                            <th scope="col">قیمت هر متر</th>
+                            <th scope="col">تعداد اتاق خواب</th>
+                            <th scope="col">تعداد حمام</th>
+                            <th scope="col">تعداد دستشویی</th>
+                            <th scope="col">تعداد پارکینگ</th>
+                            <th scope="col">تعداد سهام خانه</th>
+                            <th scope="col">نمای خانه</th>
+                            <th scope="col">نوردهی خانه</th>
+                            <th scope="col">قابلیت معاوضه</th>
+                            <th scope="col">امکانات</th>
+                            <th scope="col">توضیحات</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="home : ${homes}">
+
+                            <!--                <th scope="row" th:text="${home.id}"></th>-->
+
+
+                            <td>
+                                <a th:text="${home.title}" class="text-dark"> </a>
+                            </td>
+                            <td>
+                                <a th:if="${home.province !=null}" th:text="${home.province.title }"
+                                   class="text-dark"> </a>
+                                <a th:unless="${home.province !=null}" th:text="----" class="text-dark"> </a>
+                            </td>
+                            <td>
+                                <a th:if="${home.city !=null}" th:text="${home.city.title }" class="text-dark"> </a>
+                                <a th:unless="${home.city !=null}" th:text="----" class="text-dark"> </a>
+
+                            </td>
+
+                            <td>
+                                <a th:text="${home.zone }" class="text-dark"> </a>
+                            </td>
+
+                            <td>
+                                <a th:text="${home.address }" class="text-dark"> </a>
+                            </td>
+
+                            <td>
+                               <ul>
+                                   <li th:each="cat : ${home.category }" class="text-dark" th:text="${cat.title}"> </li>
+                               </ul>
+                            </td>
+
+                            <td>
+                                <a th:text="${home.yearOfConstruction }" class="text-dark"> </a>
+                            </td>
+
+                            <td>
+                                <a th:text="${home.totalArea }" class="text-dark"> </a>
+                            </td>
+
+                            <td>
+                                <a th:text="${home.houseArea }" class="text-dark"> </a>
+                            </td>
+
+                            <td>
+                                <a th:text="${home.totalPrice }" class="text-dark"> </a>
+                            </td>
+
+                            <td>
+                                <a th:text="${home.pricePerMeter }" class="text-dark"> </a>
+                            </td>
+
+                            <td>
+                                <a th:text="${home.numberOfBedrooms }" class="text-dark"> </a>
+                            </td>
+
+                            <td>
+                                <a th:text="${home.numberOfBathrooms }" class="text-dark"> </a>
+                            </td>
+
+                            <td>
+                                <a th:text="${home.numberOfToilets }" class="text-dark"> </a>
+                            </td>
+                            <td>
+                                <a th:text="${home.countOfParking }" class="text-dark"> </a>
+                            </td>
+                            <td>
+                                <a th:text="${home.countOfPortions }" class="text-dark"> </a>
+                            </td>
+                            <td>
+                                <a th:text="${home.view }" class="text-dark"> </a>
+                            </td>
+                            <td>
+                                <a th:text="${home.lighting }" class="text-dark"> </a>
+                            </td>
+                            <td>
+                                <a th:text="${home.interchangeable }" class="text-dark"> </a>
+                            </td>
+                            <td>
+                                <a th:text="${home.facilities }" class="text-dark"> </a>
+                            </td>
+                            <td>
+                                <a th:text="${home.description }" class="text-dark"> </a>
+                            </td>
+
+
+                            <td>
+                                <a class="btn btn-info"
+                                   style="width: 80px"
+                                   th:href="@{/admin/home/edit/{id}(id=${home.getId()})}">ویرایش</a>
+
+                                <a class="btn btn-danger"
+                                   data-toggle="modal"
+                                   href="#"
+                                   style="width: 80px" th:data-target="'#delete'+${home.getId()}">
+                                    حذف
+                                </a>
+
+                                <a class="btn btn-success" data-toggle="modal" href="#" style="width: 130px" th:data-target="'#disable'+${home.id}" >غیرفعال کردن خانه</a>
+
+                                <div aria-hidden="true" aria-labelledby="exampleModalLabeldisable" class="modal fade" role="dialog" tabindex="-1" th:id="'disable'+${home.getId()}">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabelEnable">غیرفعال کردن خانه</h5>
+                                                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <span th:text="'آیا از غیرفعال کردن ملک'"></span>
+                                                <strong th:text="${home.getTitle()}"></strong>
+                                                <span th:text="'مطمئنید؟ '"></span>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-secondary" data-dismiss="modal"
+                                                        type="button">بستن
+                                                </button>
+                                                <a class="btn btn-danger"
+                                                   th:href="@{/admin/home/disable/{id}(id=${home.getId()})}">غیرفعال کردن</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade"
+                                     role="dialog"
+                                     tabindex="-1" th:id="'delete'+${home.getId()}">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Delete Category</h5>
+                                                <button aria-label="Close" class="close" data-dismiss="modal"
+                                                        type="button">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <span th:text="'آیا از حذف ملک'"></span>
+                                                <strong th:text="${home.getTitle()}"></strong>
+                                                <span th:text="'مطمئنید؟ '"></span>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-secondary" data-dismiss="modal"
+                                                        type="button">بستن
+                                                </button>
+                                                <a class="btn btn-danger"
+                                                   th:href="@{/admin/home/delete/{id}(id=${home.getId()})}">حذف</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="col-sm-12 d-flex align-items-center justify-content-center">
+                <nav aria-label="Page navigation example" style=" text-align: center;" class="pagination-container">
+                    <ul class="pagination model-4">
+                        <li class="page-item" th:classappend="${homes.first}?disabled">
+                            <a class="page-link " style='width: 90px;border-radius: 50px 0 0 50px;'
+                               th:href="@{/admin/home/allHomes(page=${homes.number -1})}">صفحه ی
+                                قبل</a>
+                        </li>
+                        <li class="page-item" th:classappend="${homes.number ==i}?active"
+                            th:each="i : ${#numbers.sequence(0,homes.totalPages -1)}"><a
+                                class="page-link" th:href="@{/admin/home/allHomes(page=${i})} ">[[${i+1}]]</a>
+                        </li>
+                        <li class="page-item" th:classappend="${homes.last}?disabled">
+                            <a class="page-link" style="width: 90px;border-radius:0  50px 50px 0"
+                               th:href="@{/admin/home/allHomes(page=${homes.number + 1})}"> صفحه
+                                ی بعد</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div style="margin-top: 80px;" th:replace="pages/fragments/layout::footer" id="footerId"></div>
+
+<script>
+    (function ($) {
+
+        "use strict";
+
+        var fullHeight = function () {
+
+            $('.js-fullheight').css('height', $(window).height());
+            $(window).resize(function () {
+                $('.js-fullheight').css('height', $(window).height());
+            });
+
+        };
+        fullHeight();
+
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+
+    })(jQuery);
+
+</script>
+</body>
+</html>

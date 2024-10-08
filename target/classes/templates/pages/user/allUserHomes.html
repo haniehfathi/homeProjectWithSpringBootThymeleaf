@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="js/slidebar.js"></script>
+    <link rel="stylesheet" th:href="@{/css/addHomeStyle.css}"/>
+    <link href="/css/fontawesome-free-5.15.4-web/css/all.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/slidebarStyle.css}" type="text/css"/>
+    <style>
+
+        body {
+            background-image: url('/img/profile.jpg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            height: 100%;
+            width: 100%;
+            font-family: 'Poppins-Regular';
+        }
+
+        p {
+            text-align: right;
+            font-size: 18px;
+            color: #014A39;
+            font-family: 'Poppins-Regular';
+        }
+
+        #sidebar, #sidebar .custom-menu .btn.btn-primary:after {
+            background: none;
+        }
+
+        #wrapper {
+            overflow: hidden;
+        }
+        .model-4 a {
+
+            margin: 0 5px;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            border-radius: 50px;
+            background-color: #edf4ff;
+            color: black;
+            font-family: Poppins-Regular;
+            font-size: 17px
+        }
+
+        #showHomes {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        button {
+            background: none;
+            color: inherit;
+            border: none;
+            padding: 0;
+            font: inherit;
+            cursor: pointer;
+            outline: inherit;
+        }
+    </style>
+</head>
+<body style="">
+<div class="container-fluid">
+    <div id="first" dir="rtl">
+        <nav id="sidebar">
+
+            <div class="p-4">
+                <h4><a style="font-family: Poppins-Regular;font-size: 23px;color: white "
+                       th:href="@{/user/profile/userInfo}" class="logo"
+                       th:text=" ${user.getName()} + ' ' + ${user.getFamily()}"> </a></h4>
+                <ul class="list-unstyled components mb-5">
+                    <li class="active">
+                        <button onclick="showInfoFunc()">
+                            <a th:href="@{/user/profile/userInfo#showInfo}"><span class="mr-3"></span>مشاهده ی
+                                اطلاعات شخصی</a>
+                        </button>
+                    </li>
+                    <li>
+
+                            <a th:href="@{/user/profile/allHome}"><span class=" mr-3"></span> نمایش
+                                تمام خانه های من </a>
+
+                    </li>
+
+                    <li>
+                        <button onclick="showChangePassFunc()">
+                            <a th:href="@{/user/profile/userInfo#showChangePass}"><span
+                                    class=" mr-3"></span>تغییر رمز عبور</a>
+                        </button>
+                    </li>
+
+
+                </ul>
+
+
+            </div>
+        </nav>
+    </div>
+    <div id="wrapper" class="container" style="">
+            <div class="container-fluid" id="homes">
+                <div class="row border " style="margin: 20px ;background-color: whitesmoke"
+                     th:each="home : ${homes}">
+                    <div class="col-xs-6 col-md-3" style="float: left;clear: left; margin: 10px">
+                        <img class=" img-fluid" th:if="${home.getHomePictures().size() !=0}"
+                             th:each="homePic, iter :${home.getHomePictures()}"
+                             th:src="'/img/'+${homePic.getImage()}"
+                             th:id="'img'+${iter.index}+'home'+${homePic.getId()}"
+                             style="display: none;width: 250px;height: 250px">
+                        <img class=" img-fluid"
+                             th:unless="${home.getHomePictures().size() !=0}" src="/img/22.jpg" style="width: 250px;height: 250px">
+                        <p class="text-center small text-muted m-0 p-0"
+                           th:text="'Last Updated : '+  ${#temporals.format(home.getUpdatedAt(),'yyyy-MM-dd HH:mm')}"></p>
+                    </div>
+                    <div class="col-xs-12 col-md-8" style="margin-top:40px;direction: rtl">
+                        <div class="row ">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p style=""
+                                       th:text=" ${home.getProvince() !=null} ? 'استان : '+ ${home.getProvince().getTitle()}  :'استان : ----' "></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p style=""
+                                       th:text=" ${home.getCity() !=null} ? 'شهر : '+ ${home.getCity().getTitle()}  :'شهر : ----' "></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p style=""
+                                       th:text=" ${home.getCity() !=null} ? 'منطقه : '+ ${home.getCity().getTitle()}  :'منطقه : ----' "></p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row ">
+
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <p style=""
+                                       th:text="'آدرس : '+ ${home.getAddress()}"></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p th:text="'قیمت هر متر : '+ ${home.getPricePerMeter()}"></p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row ">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p style=""
+                                       th:text="'قیمت کل : '+ ${home.getTotalPrice()}"></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p style=""
+                                       th:text="'متراژ خانه : '+ ${home.getHouseArea()}"></p>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p style=""
+                                       th:text="'متراژ کل : '+ ${home.getTotalArea()}"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p style=""
+                                       th:text="'تعداد اتاق خواب : '+ ${home.getNumberOfBedrooms()}"></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p style=""
+                                       th:text="'تعداد سرویس بهداشتی : '+ ${home.getNumberOfToilets()}"></p>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p style=""
+                                       th:text="'تعداد حمام : '+ ${home.getNumberOfBathrooms()}"></p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row ">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p style=""
+                                       th:text="'سال ساخت : '+ ${home.getYearOfConstruction()}"></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p style=""
+                                       th:text="'تعداد پارکینگ : '+ ${home.getCountOfParking()}"></p>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <p style=""
+                                       th:text="'تعداد سهم برای فروش : '+ ${home.getCountOfPortions()}"></p>
+                                </div>
+                            </div>
+
+
+
+                        </div><div class="row ">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <p style=""
+                                       th:text="'توضیحات : '+ ${home.getDescription()}"></p>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <p style=""
+                                       th:text="'امکانات : '+ ${home.getFacilities()}"></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <button onclick="showEditHomeFunc()">
+                                        <a th:href="@{/user/home/edit/{id}(id=${home.getId()}) }"
+                                           style="text-align: right; font-size: 18px; font-family: 'Poppins-Regular';">
+                                            اطلاعات بیشتر و ویرایش </a>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-sm-12 d-flex align-items-center justify-content-center" >
+                    <nav aria-label="Page navigation example" style=" text-align: center;" class="pagination-container">
+                        <ul class="pagination model-4">
+                            <li class="page-item" th:classappend="${homes.first}?disabled">
+                                <a class="page-link " style='width: 90px;border-radius: 50px 0 0 50px;'
+                                   th:href="@{/user/profile/allHome(page=${homes.number -1})}">صفحه ی
+                                    قبل</a>
+                            </li>
+                            <li class="page-item" th:classappend="${homes.number ==i}?active"
+                                th:each="i : ${#numbers.sequence(0,homes.totalPages -1)}"><a
+                                    class="page-link" th:href="@{/user/profile/allHome(page=${i})} ">[[${i+1}]]</a>
+                            </li>
+                            <li class="page-item" th:classappend="${homes.last}?disabled">
+                                <a class="page-link" style="width: 90px;border-radius:0  50px 50px 0"
+                                   th:href="@{/user/profile/allHome(page=${homes.number + 1})}"> صفحه
+                                    ی بعد</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(
+        function () {
+
+            $("*[id*='img0']").css("display", "block")
+        });
+</script>
+
+<script src="/js/jquery-3.6.0.min.js"></script>
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+</body>
+</html>

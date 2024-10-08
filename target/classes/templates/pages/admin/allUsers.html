@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <link rel="stylesheet" th:href="@{/css/footerStyle.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/navbarPages.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/style_searchForm.css}"/>
+    <script src="js/slidebar.js"></script>
+
+    <link rel="stylesheet" th:href="@{/css/slidebarStyle.css}" type="text/css"/>
+    <link href="/css/fontawesome-free-5.15.4-web/css/all.min.css" rel="stylesheet" type="text/css"/>
+
+    <style>
+
+        table {
+
+            white-space: nowrap;
+        }
+
+        .model-4 a {
+
+            margin: 0 5px;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            border-radius: 50px;
+            background-color: #edf4ff;
+            color: black;
+            font-family: Poppins-Regular;
+            font-size: 17px
+        }
+
+        #wrapper {
+            overflow: hidden;
+        }
+
+        #first {
+            width: 300px;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+
+<div style="background-color: #868e96" th:replace="pages/fragments/navbarLayout::navbar"></div>
+
+<div id="wrapper" class="container-fluid">
+    <div id="first" class="">
+        <nav id="sidebar">
+            <div class="custom-menu">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                    <i class="fa fa-chevron-right"></i>
+                    <span class="sr-only">Toggle Menu</span>
+                </button>
+            </div>
+            <div class="p-4">
+                <h1><a th:href="@{/admin/home/allHomes}" class="logo">مدیریت سایت </a></h1>
+                <ul class="list-unstyled components mb-5">
+                    <li class="active">
+                        <a th:href="@{/admin/home/allHomes}"><span class="mr-3"></span> نمایش تمام خانه
+                            ها</a>
+                    </li>
+                    <li class="">
+                        <a th:href="@{/admin/home/enableHomes}"><span class="mr-3"></span> نمایش خانه های غیر فعال</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/home/addHome}"><span class=" mr-3"></span> ثبت خانه ی جدید</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/user/allUsers}"><span class=" mr-3"></span> نمایش تمام
+                            کاربران</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/user/addUser}"><span class="mr-3"></span> ثبت کاربر جدید</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/category/allCategories}"><span class="mr-3"></span> نمایش
+                            تمام انواع خانه ها</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/category/addCategory}"><span class="mr-3"></span> ثبت نوع
+                            جدید</a>
+                    </li>
+
+                </ul>
+
+
+            </div>
+        </nav>
+    </div>
+    <div id="second" dir="rtl" style="margin: auto">
+        <div class="container-fluid col-sm-12" dir="rtl" id="allUser">
+            <div style="overflow-x: scroll ;margin-bottom: 50px">
+                <form id="search-form" th:action="@{/admin/user/allUsers}" method="get">
+                    <table class="table" style="  overflow-x: scroll;">
+                        <thead class="thead-light ">
+                        <tr>
+                            <th>
+                                <a type="button" class="btn btn-primary" style="width: 166px"
+                                   th:href="@{/admin/user/addUser}">ثبت
+                                    کاربر جدید</a>
+                            </th>
+                        </tr>
+                        <tr style="padding-bottom: 200px">
+                            <div style=" background-color: #868e96;padding: 10px">
+                                <div class="row ">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="label label-input100 mt-4">نام : </label>
+                                            <input class="form-group input--style-1" id="name"
+                                                   th:value="${u.name}" type="text" name="name">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="label label-input100 mt-4">نام خانوادگی : </label>
+                                            <input class="form-group input--style-1" id="family"
+                                                   th:value="${u.family}" type="text" name="family">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="label label-input100 mt-4"> ایمیل : </label>
+                                            <input class="form-group input--style-1 " id="email"
+                                                   th:value="${u.email}" type="text" name="email">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="  mt-4 label label-input100"> موبایل : </label>
+                                            <input class="form-group input--style-1" id="mobile"
+                                                   th:value="${u.mobile}" type="text" name="mobile">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-sm-2 ">
+                                        <button dir="ltr" class=" form-group btn-submit m-b-0 "
+                                                type="submit">جستجو
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </tr>
+
+                        <tr>
+                            <th scope="col">نام و نام خانوادگی</th>
+                            <th scope="col">ایمیل</th>
+                            <th scope="col">شماره موبایل</th>
+                            <th scope="col">جنسیت</th>
+                            <th scope="col">عکس پروفایل</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="user : ${users}">
+
+                            <td>
+                                <a th:text="${user.name} +'  '+ ${user.family}" class="text-dark"> </a>
+                            </td>
+                            <td>
+                                <a th:text="${user.email }" class="text-dark"> </a>
+                            </td>
+                            <td>
+                                <a th:text="${user.mobile }" class="text-dark"> </a>
+                            </td>
+                            <td>
+                                <a th:if="${user.sex}==1" th:text="زن" class="text-dark"> </a>
+                                <a th:unless="${user.sex}==1" th:text="مرد" class="text-dark"> </a>
+                            </td>
+                            <td>
+                                <img style="width: 100px;height: 100px" th:src="'/img/'+${user.getCover()}"/>
+                            </td>
+
+                            <td>
+                                <a class="btn btn-success"
+                                   style="width: 80px" th:href="@{/admin/user/edit/{id}(id=${user.getId()})}">ویرایش</a>
+
+                                <a class="btn btn-danger"
+                                   data-toggle="modal"
+                                   href="#"
+                                   style="width: 80px" th:data-target="'#delete'+${user.getId()}">
+                                    Delete
+                                </a>
+
+                                <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade"
+                                     role="dialog"
+                                     tabindex="-1" th:id="'delete'+${user.getId()}">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Delete Category</h5>
+                                                <button aria-label="Close" class="close" data-dismiss="modal"
+                                                        type="button">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <span th:text="'آیا از حذف کاربر'"></span>
+                                                <strong th:text="${user.getName()}+' '+${user.getFamily()}"></strong>
+                                                <span th:text="'مطمئنید؟ '"></span>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-secondary" data-dismiss="modal" type="button">
+                                                    بستن
+                                                </button>
+                                                <a class="btn btn-danger"
+                                                   th:href="@{/admin/user/delete/{id}(id=${user.getId()})}">حذف</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <div class="col-sm-12 d-flex align-items-center justify-content-center" dir="rtl">
+            <nav aria-label="Page navigation example" style=" text-align: center;" class="pagination-container">
+                <ul class="pagination model-4">
+                    <li class="page-item" th:classappend="${users.first}?disabled">
+                        <a class="page-link " style='width: 90px;border-radius: 50px 0 0 50px;'
+                           th:href="@{/admin/home/allHomes(page=${users.number -1})}">صفحه ی
+                            قبل</a>
+                    </li>
+                    <li class="page-item" th:classappend="${users.number ==i}?active"
+                        th:each="i : ${#numbers.sequence(0,users.totalPages -1)}"><a
+                            class="page-link" th:href="@{/admin/home/allHomes(page=${i})} ">[[${i+1}]]</a>
+                    </li>
+                    <li class="page-item" th:classappend="${users.last}?disabled">
+                        <a class="page-link" style="width: 90px;border-radius:0  50px 50px 0"
+                           th:href="@{/admin/home/allHomes(page=${users.number + 1})}"> صفحه
+                            ی بعد</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+<div style="margin-top: 80px;" th:replace="pages/fragments/layout::footer"></div>
+
+
+<script>
+    (function ($) {
+
+        "use strict";
+
+        var fullHeight = function () {
+
+            $('.js-fullheight').css('height', $(window).height());
+            $(window).resize(function () {
+                $('.js-fullheight').css('height', $(window).height());
+            });
+
+        };
+        fullHeight();
+
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+
+    })(jQuery);
+
+</script>
+</body>
+</html>

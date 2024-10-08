@@ -1,7 +1,9 @@
 package com.project.home.service;
 
+import com.project.home.config.MyBeanCopy;
 import com.project.home.entity.Home;
 import com.project.home.entity.HomePictures;
+import com.project.home.entity.User;
 import com.project.home.repository.HomePicturesRepository;
 import com.project.home.repository.HomeRepository;
 
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -36,8 +39,7 @@ public class HomeService {
     private HomePicturesRepository homePicturesRepository;
 
     @Transactional
-    public Home addHome(Home home) throws IOException
-    {
+    public Home addHome(Home home) throws IOException, InvocationTargetException, IllegalAccessException {
     	if(home.getFile() !=null) {
     		 String path = ResourceUtils.getFile("classpath:static/img").getAbsolutePath();
     		 for(MultipartFile file:home.getFile())
@@ -56,6 +58,30 @@ public class HomeService {
 //         emailUser= authentication.getName();
 //         Long id=userService.findByEmail(emailUser);
 //         post.setUser(userService.findById(id));
+        if(home.getId() !=null)
+        {
+            Home homeExist=homeRepository.getHomeById(home.getId());
+            MyBeanCopy myBeanCopy=new MyBeanCopy();
+            myBeanCopy.copyProperties(homeExist,home);
+            return homeRepository.save(homeExist);
+        }
+        if(home.getCountOfParking() ==null)
+            home.setCountOfParking(0L);
+        if(home.getCountOfPortions() ==null)
+            home.setCountOfPortions(0L);
+        if(home.getHouseArea() ==null)
+            home.setHouseArea(0L);
+        if(home.getNumberOfBathrooms() ==null)
+            home.setNumberOfBathrooms(0L);
+        if(home.getNumberOfBedrooms() ==null)
+            home.setNumberOfBedrooms(0L);
+        if(home.getNumberOfToilets() ==null)
+            home.setNumberOfToilets(0L);
+        if(home.getTotalArea() ==null)
+            home.setTotalArea(0L);
+        if(home.getYearOfConstruction() ==null)
+            home.setYearOfConstruction(0L);
+
 
         return homeRepository.save(home);
     }
@@ -64,16 +90,27 @@ public class HomeService {
     {
          homeRepository.delete(home);
     }
+    public void deleteHomeById(Long id)
+    {
+         homeRepository.deleteById(id);
+    }
 
     public Page<Home> findBySearch(Home home,Pageable pageable){
-     	
-    	
-    	return homeRepository.findBySearch(home,(home.getCategory()!=null?(long)home.getCategory().size():0L),pageable);
+        Page<Home> homes= homeRepository.findBySearch(home,(home.getCategory()!=null?(long)home.getCategory().size():0L),pageable);
+        return homes;
+    }
+    public Page<Home> findByUserId(User user, Pageable pageable){
+        Page<Home> homes= homeRepository.getHomeByUser(user,pageable);
+        return homes;
+    }
+    public Page<Home> findDisabledHome( Pageable pageable){
+        Page<Home> homes= homeRepository.getDisabledHome(pageable);
+        return homes;
     }
     
-    public Home getHome(long id)
+    public Home getHomeById(Long id)
     {
-    			return homeRepository.getById(id);
+    	return homeRepository.getHomeById(id);
     }
 
     public List<Home> getAllHome()
@@ -81,4 +118,13 @@ public class HomeService {
         return homeRepository.findAll();
     }
 
+    public  void enableHome(Home home)
+    {
+        homeRepository.enableHome(home);
+    }
+
+    public  void disableHome(Home home)
+    {
+        homeRepository.disableHome(home);
+    }
 }
